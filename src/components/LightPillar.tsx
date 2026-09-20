@@ -2,6 +2,23 @@ import { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import './LightPillar.css';
 
+interface LightPillarProps {
+  topColor?: string;
+  bottomColor?: string;
+  intensity?: number;
+  rotationSpeed?: number;
+  interactive?: boolean;
+  className?: string;
+  glowAmount?: number;
+  pillarWidth?: number;
+  pillarHeight?: number;
+  noiseIntensity?: number;
+  mixBlendMode?: string;
+  pillarRotation?: number;
+  quality?: 'low' | 'medium' | 'high';
+  lightMode?: boolean;
+}
+
 const LightPillar = ({
   topColor = '#5227FF',
   bottomColor = '#FF9FFC',
@@ -17,9 +34,9 @@ const LightPillar = ({
   pillarRotation = 0,
   quality = 'high',
   lightMode = false
-}) => {
+}: LightPillarProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
- const rafRef = useRef<number | null>(null);  
+  const rafRef = useRef<number | null>(null);  
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -42,8 +59,8 @@ const LightPillar = ({
     if (!containerRef.current || !webGLSupported) return;
 
     const container = containerRef.current;
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+    const width = container.clientWidth || window.innerWidth;
+    const height = container.clientHeight || window.innerHeight;
 
     const scene = new THREE.Scene();
     sceneRef.current = scene;
@@ -282,8 +299,8 @@ const LightPillar = ({
 
       resizeTimeout = window.setTimeout(() => {
         if (!rendererRef.current || !materialRef.current || !containerRef.current) return;
-        const newWidth = containerRef.current.clientWidth;
-        const newHeight = containerRef.current.clientHeight;
+        const newWidth = containerRef.current.clientWidth || window.innerWidth;
+        const newHeight = containerRef.current.clientHeight || window.innerHeight;
         rendererRef.current.setSize(newWidth, newHeight);
         materialRef.current.uniforms.uResolution.value.set(newWidth, newHeight);
       }, 150);
@@ -382,15 +399,30 @@ const LightPillar = ({
     materialRef.current.uniforms.uPillarRotSin.value = Math.sin(pillarRotRad);
   }, [pillarRotation]);
 
+  // Jika WebGL tidak didukung, tampilkan fallback gradient CSS
   if (!webGLSupported) {
     return (
       <div
         ref={containerRef}
         className={`light-pillar-container ${className}`}
-        style={{ mixBlendMode: mixBlendMode as React.CSSProperties['mixBlendMode'] }}
+        style={{
+          mixBlendMode: mixBlendMode as React.CSSProperties['mixBlendMode'],
+          background: 'radial-gradient(circle at 50% 20%, rgba(82, 39, 255, 0.25) 0%, rgba(15, 23, 42, 0) 70%)'
+        }}
       />
     );
-  } // <-- Tambahkan kurung kurawal penutup fungsi di sini!
+  }
 
-}
-  export default LightPillar;
+  // RETURN ELEMEN DOM UTAMA UNTUK WEBGL CANVAS
+  return (
+    <div
+      ref={containerRef}
+      className={`light-pillar-container ${className}`}
+      style={{
+        mixBlendMode: mixBlendMode as React.CSSProperties['mixBlendMode']
+      }}
+    />
+  );
+};
+
+export default LightPillar;
