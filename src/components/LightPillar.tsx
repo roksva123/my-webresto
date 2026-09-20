@@ -19,7 +19,7 @@ const LightPillar = ({
   lightMode = false
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number>();
+ const rafRef = useRef<number | null>(null);  
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -234,7 +234,7 @@ const LightPillar = ({
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    let mouseMoveTimeout: NodeJS.Timeout | null = null;
+    let mouseMoveTimeout: ReturnType<typeof setTimeout> | null = null;
     const handleMouseMove = (event: MouseEvent) => {
       if (!interactive) return;
       if (mouseMoveTimeout) return;
@@ -274,7 +274,7 @@ const LightPillar = ({
     };
     rafRef.current = requestAnimationFrame(animate);
 
-    let resizeTimeout: NodeJS.Timeout | null = null;
+    let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
     const handleResize = () => {
       if (resizeTimeout) {
         clearTimeout(resizeTimeout);
@@ -314,7 +314,7 @@ const LightPillar = ({
       sceneRef.current = null;
       cameraRef.current = null;
       geometryRef.current = null;
-      rafRef.current = undefined;
+      rafRef.current = null;
     };
   }, [webGLSupported, quality]);
 
@@ -384,13 +384,13 @@ const LightPillar = ({
 
   if (!webGLSupported) {
     return (
-      <div className={`light-pillar-fallback ${className}`} style={{ mixBlendMode }}>
-        WebGL not supported
-      </div>
+      <div
+        ref={containerRef}
+        className={`light-pillar-container ${className}`}
+        style={{ mixBlendMode: mixBlendMode as React.CSSProperties['mixBlendMode'] }}
+      />
     );
-  }
+  } // <-- Tambahkan kurung kurawal penutup fungsi di sini!
 
-  return <div ref={containerRef} className={`light-pillar-container ${className}`} style={{ mixBlendMode }} />;
-};
-
-export default LightPillar;
+}
+  export default LightPillar;
