@@ -104,7 +104,7 @@ const LandingPage: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen text-white relative">
+    <div className="min-h-screen text-white relative"><div className="absolute top-2 right-2 text-sm text-gray-400 opacity-70">aufa abdillah</div>
       {/* Light Pillar Background Effect - Three.js */}
       <div className="fixed inset-0 w-full h-full pointer-events-none" >
 
