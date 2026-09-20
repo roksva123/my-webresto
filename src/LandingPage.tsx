@@ -104,7 +104,7 @@ const LandingPage: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen text-white relative"><div className="absolute top-2 right-2 text-sm text-gray-400 opacity-70">aufa abdillah</div>
+    <div className="min-h-screen text-white relative">
       {/* Light Pillar Background Effect - Three.js */}
       <div className="fixed inset-0 w-full h-full pointer-events-none" >
 
@@ -180,6 +180,8 @@ const LandingPage: React.FC = () => {
                 >
                   Hubungi Kami
                 </a>
+
+              
               </div>
 
               {/* Mobile Menu Button */}
@@ -230,7 +232,7 @@ const LandingPage: React.FC = () => {
       <section className="pt-12 sm:pt-20 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           {/* Brand/Logo Section */}
-
+              <div className="absolute top-2 right-2 text-sm text-white z-50">aufa abdillah</div>
 
           {/* Main Headline */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
